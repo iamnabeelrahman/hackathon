@@ -1,0 +1,199 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #0a0b14;
+  color: white;
+}
+
+/* Navigation styles */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: rgba(10, 11, 20, 0.9);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+}
+
+.login-btn {
+  border: 1px solid white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: white;
+  color: #0a0b14;
+}
+
+/* Hero section styles */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 5%;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-subtitle {
+  color: #ffd700;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.hero-title {
+  font-size: 4rem;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+  max-width: 900px;
+}
+
+.join-btn {
+  background-color: #ffd700;
+  color: #0a0b14;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 3rem;
+}
+
+.join-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+}
+
+/* Members section styles */
+.members {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.members-avatars {
+  display: flex;
+  margin-right: 1rem;
+}
+
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #0a0b14;
+  margin-left: -10px;
+}
+
+.members-text {
+  text-align: left;
+}
+
+.members-count {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Footer section styles */
+.footer {
+  background: linear-gradient(to top, #2a1b3d, transparent);
+  padding: 4rem 5% 2rem;
+  text-align: center;
+}
+
+.footer-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.footer-subtitle {
+  font-size: 1.1rem;
+  color: #ccc;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.footer-link {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: white;
+}
+
+/* Floating rockets animation */
+.rocket {
+  position: absolute;
+  opacity: 0.2;
+  animation: float 20s infinite linear;
+}
+
+.rocket-1 {
+  top: 20%;
+  left: 10%;
+}
+
+.rocket-2 {
+  top: 60%;
+  right: 15%;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-50px) rotate(10deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
