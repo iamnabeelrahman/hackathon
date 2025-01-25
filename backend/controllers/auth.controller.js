@@ -36,11 +36,15 @@ const registerUser = async (req, res) => {
 
   // const userImageLocalPath = req.files?.profileImage[0]?.path;
   // const profileImage = await uploadOnCloudinary(userImageLocalPath);
-  const { buffer, originalname } = req.file;
-  const fileName = `${Date.now()}-${originalname}`;
-
-  // Upload the file buffer directly to Cloudinary
-  const result = await uploadOnCloudinary(buffer, fileName);
+  const { buffer, originalname } = req?.file || {}; // Destructure with default empty object if no file
+  const fileName = originalname ? `${Date.now()}-${originalname}` : null; // Generate file name only if file exists
+  
+  let result = null; // Declare result variable
+  
+  // Check if file exists before attempting to upload
+  if (buffer && originalname) {
+    result = await uploadOnCloudinary(buffer, fileName);
+  }
 
   const newUser = await User.create({
     username: body.username.toLowerCase(),
