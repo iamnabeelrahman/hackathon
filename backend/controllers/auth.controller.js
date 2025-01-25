@@ -34,20 +34,20 @@ const registerUser = async (req, res) => {
     });
   }
 
-  const userImageLocalPath = req.files?.profileImage[0]?.path;
-  const profileImage = await uploadOnCloudinary(userImageLocalPath);
-  // const { buffer, originalname } = req.file;
-  // const fileName = `${Date.now()}-${originalname}`;
+  // const userImageLocalPath = req.files?.profileImage[0]?.path;
+  // const profileImage = await uploadOnCloudinary(userImageLocalPath);
+  const { buffer, originalname } = req.file;
+  const fileName = `${Date.now()}-${originalname}`;
 
-  // // Upload the file buffer directly to Cloudinary
-  // const result = await uploadOnCloudinary(buffer, fileName);
+  // Upload the file buffer directly to Cloudinary
+  const result = await uploadOnCloudinary(buffer, fileName);
 
   const newUser = await User.create({
     username: body.username.toLowerCase(),
     email: body.email,
     fullName: body.fullName,
     password: body.password,
-    profileImage: profileImage?.url || "",
+    profileImage: result?.url || "",
   });
 
   const checkCreatedUser = await User.findById(newUser._id).select(
@@ -334,12 +334,15 @@ const updateEmail = async (req, res) => {
 };
 
 const updateProfileImage = async (req, res) => {
-  const profileImage = req.file?.path;
+  // const profileImage = req.file?.path;
+  const { buffer, originalname } = req.file;
+  const fileName = `${Date.now()}-${originalname}`;
 
-  if (!profileImage) {
+
+  if (!buffer || !originalname) {
     return res.status(400).json({
       success: false,
-      message: "profileImage is missing",
+      message: "error while uploading profile image",
       data: null,
     });
   }
@@ -349,7 +352,7 @@ const updateProfileImage = async (req, res) => {
   // Upload the file buffer directly to Cloudinary
   const result = await uploadOnCloudinary(buffer, fileName);
 
-  const uploadedProfileImage= await uploadOnCloudinary(profileImage);
+  // const uploadedProfileImage= await uploadOnCloudinary(profileImage);
 
   if (!uploadedProfileImage.url) {
     return res.status(400).json({

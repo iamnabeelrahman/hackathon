@@ -14,8 +14,8 @@ app.use(cookieParser());
 
 
 
-app.get('/', (req, res) => {
-    res.redirect('/register') // will change it to Home once home page is ready
+app.get("/", (req, res) => {
+    res.send("Hello World");
 })
 
 //routes declaration
