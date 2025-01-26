@@ -112,7 +112,7 @@ const PrivacyPolicy = () => {
                 please reach out to us at:
               </p>
               <p className="mt-4 text-[#38bdf8] font-semibold">
-                support@projectpal.com
+                support@auraconnect.com
               </p>
             </div>
           </section>
