@@ -51,7 +51,7 @@ const registerUser = async (req, res) => {
     email: body.email,
     fullName: body.fullName,
     password: body.password,
-    profileImage: result?.url || "",
+    profileImage: result?.url || "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg",
   });
 
   const checkCreatedUser = await User.findById(newUser._id).select(
@@ -136,12 +136,15 @@ const logoutUser = async (req, res) => {
       });
     }
 
+    // Clear the refreshToken and update the user in DB
     user.refreshToken = null;
     await user.save({ validateBeforeSave: false });
 
+    // Clear the cookies from the client
     const options = {
       httpOnly: true,
-      secure: true,
+      sameSite: 'None',  // Required for cross-origin requests
+      secure: false,  // Set to false for local development (no HTTPS)
     };
 
     res.clearCookie("accessToken", options);
@@ -151,12 +154,13 @@ const logoutUser = async (req, res) => {
       message: "Logged out successfully",
     });
   } catch (error) {
-    console.log("Logged out errro: ", error);
+    console.log("Logout error:", error);
     res.status(500).json({
-      message: "An arror occurred while logging out",
+      message: "An error occurred while logging out",
     });
   }
 };
+
 
 const refreshAccessToken = async (req, res) => {
   const incomingUserToken = req.cookies.refreshToken || req.body.refreshToken;
@@ -339,26 +343,16 @@ const updateEmail = async (req, res) => {
 
 const updateProfileImage = async (req, res) => {
   // const profileImage = req.file?.path;
-  const { buffer, originalname } = req.file;
-  const fileName = `${Date.now()}-${originalname}`;
-
-
-  if (!buffer || !originalname) {
-    return res.status(400).json({
-      success: false,
-      message: "error while uploading profile image",
-      data: null,
-    });
+  const { buffer, originalname } = req?.file || {}; // Destructure with default empty object if no file
+  const fileName = originalname ? `${Date.now()}-${originalname}` : null; // Generate file name only if file exists
+  
+  let result = null; // Declare result variable
+  // Check if file exists before attempting to upload
+  if (buffer && originalname) {
+    result = await uploadOnCloudinary(buffer, fileName);
   }
-  // const { buffer, originalname } = req.file;
-  // const fileName = `${Date.now()}-${originalname}`;
 
-  // Upload the file buffer directly to Cloudinary
-  const result = await uploadOnCloudinary(buffer, fileName);
-
-  // const uploadedProfileImage= await uploadOnCloudinary(profileImage);
-
-  if (!uploadedProfileImage.url) {
+  if (!result.url) {
     return res.status(400).json({
       success: false,
       message: "error while uploading profile image",
@@ -370,7 +364,7 @@ const updateProfileImage = async (req, res) => {
     req.user?._id,
     {
       $set: {
-        profileImage: uploadedProfileImage.url,
+        profileImage: result.url,
       },
     },
     { new: true }
@@ -379,9 +373,91 @@ const updateProfileImage = async (req, res) => {
   return res.status(200).json({
     success: true,
     message: "profileImage updated successfully",
-    data: uploadedProfileImage.url,
+    data: result.url,
   });
 };
+const uploadResume = async (req, res) => {
+  const { buffer, originalname } = req?.file || {};
+  const fileName = originalname ? `${Date.now()}-${originalname}` : null; 
+  
+  let result = null;
+  
+  // Check if file exists before attempting to upload
+  if (buffer && originalname) {
+    result = await uploadOnCloudinary(buffer, fileName);
+  }
+  if (!result.url) {
+    return res.status(400).json({
+      success: false,
+      message: "error while uploading resume",
+      data: false,
+    });
+  }
+  await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        resume: result.url,
+      },
+    },
+    { new: true }
+  ).select("-password -refreshToken");
+
+  return res.status(200).json({
+    success: true,
+    message: "resume updated successfully",
+    data: result.url,
+  });
+};
+
+const updatePhoneNumber = async (req, res) => {
+  const { phoneNumber } = req.body;
+  const userId = req.user?._id;
+  if (!phoneNumber) {
+    return res.status(400).json({
+      success: false,
+      message: "Phone number is required.",
+      data: null,
+    });
+  }
+  if (!/^\d+$/.test(phoneNumber)) {  // Check if the phoneNumber contains only digits
+    return res.status(400).json({
+      success: false,
+      message: "Phone number must be a valid number.",
+      data: null,
+    });
+  }
+
+  try {
+    // Fetch the user's details
+    const user = await User.findById(userId);    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+        data: null,
+      });
+    }
+    // Update and save the new phoneNumber
+    user.phoneNumber = phoneNumber;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Phone number updated successfully.",
+      data: null,
+    });
+  } catch (error) {
+    console.error("Error updating phoneNumber:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error. Please try again later.",
+      data: null,
+    });
+  }
+};
+
+
 
 module.exports = {
   registerUser,
@@ -392,5 +468,7 @@ module.exports = {
   updateFullName,
   updateEmail,
   updateProfileImage,
+  uploadResume,
+  updatePhoneNumber
 
 };

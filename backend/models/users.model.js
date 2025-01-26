@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
-      min: [7, "username should be at least 7 characters"],
+      min: [5, "username should be at least 5 characters"],
       max: 30,
       unique: true,
       lowercase: true,
@@ -59,6 +59,12 @@ const userSchema = new mongoose.Schema(
         ref: "Project",
       },
     ],
+    joinedProjects: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project",
+      },
+    ],
     following: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -73,8 +79,10 @@ const userSchema = new mongoose.Schema(
     ],
     notifications: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Notification",
+        message: String,
+        type: { type: String }, // e.g., "message", "project_invite", etc.
+        createdAt: { type: Date, default: Date.now },
+        isRead: { type: Boolean, default: false },
       },
     ],
     messages: [
@@ -83,6 +91,12 @@ const userSchema = new mongoose.Schema(
         ref: "Message",
       },
     ],
+    resume: {
+      type: String,
+    },
+    phoneNumber: {
+      type: Number,
+    },
     refreshToken: {
       type: String,
     },

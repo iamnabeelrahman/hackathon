@@ -15,26 +15,80 @@ const projectSchema = new mongoose.Schema(
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    },
-    views: {
-      type: Number,
-      default: 0,
+      required: true,
     },
     thumbnail: {
       //cloudinary URL
       type: String,
     },
-    isOnGoing: {
-      type: Boolean,
-      default: true,
+    stage: {
+      type: String,
+      required: true,
     },
-    timeLeft: {
+    deadline: {
       type: Number,
       required: true,
     },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        text: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    teamSize: {
+      type: Number,
+      required: true,
+    },
+    teamMembers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    views: {
+      type: Number,
+      default: 0,
+    },
+    // tags: [
+    //   {
+    //     type: String,
+    //   },
+    // ],
+    location: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },  
+    applicants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ]
   },
   { timestamps: true }
 );
 
-const Video = new mongoose.model("Video", videoSchema);
-module.exports = { Video };
+projectSchema.plugin(mongooseAggregatePaginate);
+
+const Project = new mongoose.model("Project", projectSchema);
+module.exports = { Project };
