@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Upload, LogOutIcon } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,9 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resumeFile, setResumeFile] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingResume, setIsUploadingResume] = useState(false);
+  const [isSavingPhoneNumber, setIsSavingPhoneNumber] = useState(false);
 
   const navigate = useNavigate();
 
@@ -38,7 +41,7 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
       }
 
       try {
-        setIsSubmitting(true);
+        setIsUploadingImage(true);
         const response = await axios.post(
           "https://api-backend-projectpal-6gsq.onrender.com/api/v1/auth/update-profileimage",
           formData,
@@ -49,11 +52,14 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
             },
           }
         );
-        // console.log(response.data.message || "Profile image updated successfully!");
+        console.log(
+          response.data.message || "Profile image updated successfully!"
+        );
+        window.location.reload();
       } catch (error) {
         console.error("Error:", error.response?.data?.message || error.message);
       } finally {
-        setIsSubmitting(false);
+        setIsUploadingImage(false);
       }
     }
   };
@@ -80,7 +86,7 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
       }
 
       try {
-        setIsSubmitting(true);
+        setIsUploadingResume(true);
         const response = await axios.post(
           "https://api-backend-projectpal-6gsq.onrender.com/api/v1/auth/upload-Resume",
           formData,
@@ -91,11 +97,11 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
             },
           }
         );
-        // console.log(response.data.message || "Resume uploaded successfully!");
+        console.log(response.data.message || "Resume uploaded successfully!");
       } catch (error) {
         console.error("Error:", error.response?.data?.message || error.message);
       } finally {
-        setIsSubmitting(false);
+        setIsUploadingResume(false);
       }
     }
   };
@@ -112,7 +118,7 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
     }
 
     try {
-      setIsSubmitting(true);
+      setIsSavingPhoneNumber(true);
       const response = await axios.post(
         "https://api-backend-projectpal-6gsq.onrender.com/api/v1/auth/add-phone-number",
         { phoneNumber },
@@ -123,11 +129,11 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
           },
         }
       );
-      // console.log(response.data.message || "Phone number added successfully!");
+      console.log(response.data.message || "Phone number added successfully!");
     } catch (error) {
       console.error("Error:", error.response?.data?.message || error.message);
     } finally {
-      setIsSubmitting(false);
+      setIsSavingPhoneNumber(false);
     }
   };
 
@@ -177,10 +183,6 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
 
   if (!isModalOpen) return null;
 
-  // useEffect(() => {
-    // console.log(userData);
-  // }, []);
-
   return (
     <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
       <div
@@ -193,7 +195,11 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
             <div className="flex flex-auto items-center space-x-4">
               <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-300">
                 <img
-                  src={profileImage || userData.profileImage ? userData.profileImage : "https://placehold.co/400"}
+                  src={
+                    profileImage || userData.profileImage
+                      ? userData.profileImage
+                      : "https://placehold.co/400"
+                  }
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
@@ -234,9 +240,9 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
               className="bg-green-600 text-black px-6 cursor-pointer py-1 rounded w-32 h-10 mt-2"
               type="button"
               onClick={handleProfileImageUpload}
-              disabled={isSubmitting}
+              disabled={isUploadingImage}
             >
-              Upload
+              {isUploadingImage ? "Uploading..." : "Upload"}
             </button>
           </div>
           {/* Form Section */}
@@ -256,8 +262,9 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
               <button
                 className="bg-green-600 text-black px-6 cursor-pointer py-1 rounded w-32 h-10"
                 type="submit"
+                disabled={isSavingPhoneNumber}
               >
-                Save
+                {isSavingPhoneNumber ? "Saving..." : "Save"}
               </button>
             </div>
 
@@ -277,9 +284,9 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
               <button
                 className="bg-green-600 text-black px-6 cursor-pointer py-1 rounded w-32 h-10"
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSavingPhoneNumber}
               >
-                Save
+                {isSavingPhoneNumber ? "Saving..." : "Save"}
               </button>
             </div>
           </form>
@@ -302,9 +309,9 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
                 className="bg-green-600 text-black px-6 cursor-pointer py-1 rounded w-32 h-10"
                 type="button"
                 onClick={handleResumeUpload}
-                disabled={isSubmitting}
+                disabled={isUploadingResume}
               >
-                Upload
+                {isUploadingResume ? "Uploading..." : "Upload"}
               </button>
             </div>
           </form>

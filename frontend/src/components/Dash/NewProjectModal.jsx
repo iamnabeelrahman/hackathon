@@ -19,11 +19,10 @@ const NewProjectModal = ({ isOpen, onClose }) => {
     description: "",
     category: "",
     teamSize: "",
-
     deadline: "",
     location: "",
-    // postedDate: "",
   });
+  const [charCount, setCharCount] = useState(0);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,11 +30,21 @@ const NewProjectModal = ({ isOpen, onClose }) => {
       ...prev,
       [name]: name === "teamSize" ? Number(value) : value,
     }));
+    if (name === "description") {
+      setCharCount(value.length);
+    }
   };
 
   // Function to post the project data to the backend
   const postProjectData = async (e) => {
     e.preventDefault();
+
+    // Validate description length
+    if (project.description.length < 300) {
+      alert("Description must be at least 300 characters long.");
+      return;
+    }
+
     try {
       const token =
         localStorage.getItem("accessToken") ||
@@ -142,21 +151,24 @@ const NewProjectModal = ({ isOpen, onClose }) => {
             </select>
           </div>
 
-          <div className="input-group textarea-group">
+          <div className="input-group textarea-group relative">
             <label htmlFor="description">
               <BookText className="text-gray-300 mr-2" />
             </label>
             <textarea
-              className="bg-gray-800 text-white border border-gray-700 rounded-md"
+              className="bg-gray-800 text-white border border-gray-700 rounded-md pr-10"
               type="text"
               name="description"
               id="description"
               value={project.description}
               onChange={handleChange}
-              placeholder="Enter Project Description - Brifly let the user know about your project and your vision."
+              placeholder="Enter Project Description - Briefly let the user know about your project and your vision."
               rows="4"
               required
             />
+            <div className="absolute bottom-2 right-2 text-gray-400 text-sm">
+              {charCount} / 300
+            </div>
           </div>
 
           <div className="input-group">
