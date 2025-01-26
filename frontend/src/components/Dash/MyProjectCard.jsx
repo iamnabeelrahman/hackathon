@@ -94,7 +94,7 @@ function MyProjectCard({ project }) {
             
           )} */}
 
-          <div className="py-4 w-[1050px]">
+          <div className="py-4 w-[2000px]">
             <h1 className="text-center mb-4 text-lg">Applicants</h1>
             {applicants &&
               applicants.map((applicant, index) => (

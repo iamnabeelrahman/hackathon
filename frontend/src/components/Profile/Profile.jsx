@@ -11,6 +11,9 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isUploadingResume, setIsUploadingResume] = useState(false);
   const [isSavingPhoneNumber, setIsSavingPhoneNumber] = useState(false);
+  const [imageUploadMessage, setImageUploadMessage] = useState("");
+  const [resumeUploadMessage, setResumeUploadMessage] = useState("");
+  const [phoneNumberSaveMessage, setPhoneNumberSaveMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -52,9 +55,7 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
             },
           }
         );
-        console.log(
-          response.data.message || "Profile image updated successfully!"
-        );
+        setImageUploadMessage(response.data.message || "Profile image updated successfully!");
         window.location.reload();
       } catch (error) {
         console.error("Error:", error.response?.data?.message || error.message);
@@ -97,7 +98,7 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
             },
           }
         );
-        console.log(response.data.message || "Resume uploaded successfully!");
+        setResumeUploadMessage(response.data.message || "Resume uploaded successfully!");
       } catch (error) {
         console.error("Error:", error.response?.data?.message || error.message);
       } finally {
@@ -129,7 +130,7 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
           },
         }
       );
-      console.log(response.data.message || "Phone number added successfully!");
+      setPhoneNumberSaveMessage(response.data.message || "Phone number added successfully!");
     } catch (error) {
       console.error("Error:", error.response?.data?.message || error.message);
     } finally {
@@ -245,10 +246,13 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
               {isUploadingImage ? "Uploading..." : "Upload"}
             </button>
           </div>
+          {imageUploadMessage && (
+            <p className="text-green-500 text-sm mt-2">{imageUploadMessage}</p>
+          )}
           {/* Form Section */}
           <form className="space-y-4" onSubmit={handlePhoneNumberSubmit}>
             {/* Name Fields */}
-            <div className="my-4 flex items-center gap-3">
+            {/* <div className="my-4 flex items-center gap-3">
               <div className="mb-4 flex-auto">
                 <label className="block text-sm font-medium text-gray-400">
                   Full Name
@@ -266,7 +270,7 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
               >
                 {isSavingPhoneNumber ? "Saving..." : "Save"}
               </button>
-            </div>
+            </div> */}
 
             <div className="my-4 flex items-center gap-3">
               <div className="mb-4 flex-auto">
@@ -289,6 +293,9 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
                 {isSavingPhoneNumber ? "Saving..." : "Save"}
               </button>
             </div>
+            {phoneNumberSaveMessage && (
+              <p className="text-green-500 text-sm mt-2">{phoneNumberSaveMessage}</p>
+            )}
           </form>
 
           <form className="space-y-4">
@@ -314,6 +321,9 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
                 {isUploadingResume ? "Uploading..." : "Upload"}
               </button>
             </div>
+            {resumeUploadMessage && (
+              <p className="text-green-500 text-sm mt-2">{resumeUploadMessage}</p>
+            )}
           </form>
         </div>
       </div>
