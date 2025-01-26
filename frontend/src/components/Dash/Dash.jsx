@@ -120,65 +120,66 @@ const FeaturedProjects = ({ userData }) => {
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
           <input
-            className="w-1/3 p-2 text-white bg-gray-800 border border-gray-700 rounded-md"
+            className="w-[250px] p-2 text-white bg-gray-800 border border-gray-700 rounded-md"
             placeholder="Search for a specific project..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
           />
 
-          <button className="NewProjectBtn" onClick={openModal}>
-            <div className="sign">+</div>
-            <div className="text">Create Project</div>
+          <button class="NewProjectBtn" onClick={openModal}>
+            <div class="sign">+</div>
+            <div class="text">Create Project</div>
           </button>
         </div>
 
-        <Filters
-          setCategoryFilter={setCategoryFilter}
-          setTeamSizeFilter={setTeamSizeFilter}
-          setStageFilter={setStageFilter}
-          setSortOption={setSortOption}
-          isMyProjects={isMyProjects}
-          setIsMyProjects={setIsMyProjects}
-          categoryFilter={categoryFilter}
-          teamSizeFilter={teamSizeFilter}
-          stageFilter={stageFilter}
-          sortOption={sortOption}
-        />
+        {/* Filter Section */}
+        <div className="grid grid-cols-1 gap-2 mb-8 sm:flex sm:flex-wrap sm:gap-4 sm:justify-between lg:justify-normal">
+          <button
+            onClick={() => setIsMyProjects(!isMyProjects)}
+            className="px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-md"
+          >
+            {isMyProjects ? "All Projects" : "My Projects"}
+          </button>
+          <select className="p-2 bg-gray-800 text-white border border-gray-700 rounded-md">
+            <option>Category</option>
+            <option>Software Hackathons</option>
+            <option>Hardware Hackathons</option>
+            <option>Projects</option>
+            <option>Competitions</option>
+          </select>
+          <select className="p-2 bg-gray-800 text-white border border-gray-700 rounded-md">
+            <option>Location</option>
+            <option>Global</option>
+            <option>Remote</option>
+          </select>
+          <select className="p-2 bg-gray-800 text-white border border-gray-700 rounded-md">
+            <option>Team Size</option>
+
+            <option>1-3</option>
+            <option>4-6</option>
+            <option>more than 6</option>
+          </select>
+          <select className="p-2 bg-gray-800 text-white border border-gray-700 rounded-md">
+            <option>Stage</option>
+            <option>Idea Stage</option>
+            <option>Ongoing Stage</option>
+          </select>
+          <button className="px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-md">
+            Sort by
+          </button>
+        </div>
 
         {/* Projects Section */}
         <h2 className="text-2xl font-bold mb-4 mt-6">
           {isMyProjects ? "My Projects" : "All Projects"}
         </h2>
-
-        {/* Loading Spinner */}
-        {isLoading ? (
-          <div className="flex justify-center items-center min-h-[200px]">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
-          </div>
-        ) : (
-          <div
-            className={` ${
-              isMyProjects ? "flex mt-6 flex-col items-center gap-3" : "grid grid-cols-1 md:grid-cols-3 gap-6"
-            }`}
-          >
-            {isMyProjects ? (
-              myProjects.length > 0 ? (
-                myProjects.map((project) => (
-                  <MyProjectCard key={project._id} project={project} />
-                ))
-              ) : (
-                <p>No projects found.</p>
-              )
-            ) : filteredProjects.length > 0 ? (
-              filteredProjects.map((project) => (
-                <ProjectCard key={project._id} project={project} userData={userData} />
-              ))
-            ) : (
-              <p>No projects found.</p>
-            )}
-          </div>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {isMyProjects ? (
+            <MyProjectCard project={demoProject} />
+          ) : (
+            <ProjectCard project={demoProject} />
+          )}
+        </div>
       </div>
+
       <NewProjectModal isOpen={isModalOpen} onClose={closeModal} />
     </>
   );
