@@ -162,8 +162,8 @@ const Profile = ({ setIsModalOpen, isModalOpen, userData }) => {
         if (response.ok) {
           alert("Logged out successfully!");
           localStorage.removeItem("accessToken");
-          navigate("/");
-          window.location.reload();
+          // navigate("/");
+          // window.location.reload();
         } else {
           // Handle error response
           alert(`Error: ${data.message || "Logout failed"}`);

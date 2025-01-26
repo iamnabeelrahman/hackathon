@@ -5,8 +5,6 @@ import Landing from "./components/Landing";
 import Dash from "./components/Dash/Dash";
 import Navbar from "./components/Navbar";
 import axios from "axios";
-import PrivacyPolicy from "./components/PrivacyPolicy";
-import TermsAndConditions from "./components/TermsCondition";
 
 function App() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -80,8 +78,6 @@ function App() {
           }
         />
         <Route path="/dash" element={<Dash userData={userData} />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/termsandcondition" element={<TermsAndConditions />} />
       </Routes>
     </>
   );

@@ -73,7 +73,7 @@ function Signup({ setCurrentStuff }) {
 
         <div className="login-header">
           <Trophy size={32} className="login-logo" />
-          <h1>Join AuraConnect</h1>
+          <h1>Join Projectpal</h1>
           <p>Start your journey to success</p>
         </div>
 

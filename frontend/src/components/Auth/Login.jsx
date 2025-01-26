@@ -24,8 +24,8 @@ function Login({ setCurrentPage, setCurrentStuff, userData, setUserData }) {
 
     alert(response.data.message || "Logged in successfully!");
     setIsSubmitting(false);
-    navigate("/dash");
-    window.location.reload();
+    // navigate("/dash");
+    // window.location.reload();
     setUserData(response.data.user);
     localStorage.setItem("accessToken", response.data.accessToken);
   };

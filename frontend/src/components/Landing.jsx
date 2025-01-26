@@ -58,24 +58,23 @@ function Landing({ setCurrentPage, isLoggedIn }) {
 
       <footer className="footer">
         <h2 className="footer-title">
-          From <span>Idea</span> to the <span>Execution</span>
-          <span className="roc"> 🚀 </span>
-          <u>Build</u> or <u>Join</u> Your <span>Dream Team</span>
+          From <span>Idea</span> to the <span>Execution</span><span className="roc"> 🚀 </span><u>Build</u>{" "}
+          or <u>Join</u> Your <span>Dream Team</span>
         </h2>
         <p className="footer-subtitle">
-          Kickstart Your Ideas Journey by Finding the Perfect Teammates,
-          Guidance, and Collaboration Opportunities — All in one place.
+          Kickstart your hackathon journey by finding the perfect teammates,
+          guidance, and collaboration opportunities — All in one place.
         </p>
         <div className="footer-links">
           <a href="/privacy" className="footer-link">
             Privacy Policy
           </a>
-          <a href="/termsandcondition" className="footer-link">
+          <a href="/terms" className="footer-link">
             Terms and Conditions
           </a>
-          {/* <a href="/community" className="footer-link">
+          <a href="/community" className="footer-link">
             Join our community!
-          </a> */}
+          </a>
         </div>
       </footer>
     </>

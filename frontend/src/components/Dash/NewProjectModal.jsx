@@ -77,7 +77,7 @@ const NewProjectModal = ({ isOpen, onClose }) => {
           location: "",
         });
         onClose(); // Close the modal after posting
-        window.location.reload(); // Reload the page to see the new project
+        // window.location.reload(); // Reload the page to see the new project
       } else {
         console.error("Error posting project:", result.message);
         alert("Error posting project: " + result.message);
