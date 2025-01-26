@@ -80,10 +80,17 @@ const projectSchema = new mongoose.Schema(
     },  
     applicants: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        username: String,
+        email: String,
+        phoneNumber: String,
+        profileImage: String,
+        resume: String,
       },
-    ]
+    ],
   },
   { timestamps: true }
 );

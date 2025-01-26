@@ -1,10 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { User, Calendar, List, Users } from "lucide-react";
+import axios from "axios";
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, userData }) {
+  const [hasApplied, setHasApplied] = useState(false);
+
   useEffect(() => {
-    console.log("project", project);
-  }, [project]);
+    // console.log(userData);
+    // Check if the user has already applied to the project
+    if (userData.appliedProjects?.includes(project._id)) {
+      setHasApplied(true);
+    }
+  }, [userData, project._id]);
+
+  const handleApply = async (projectId) => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      alert("Unauthorized. Please log in.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `https://api-backend-projectpal-6gsq.onrender.com/api/v1/auth/join-project/${projectId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert(response.data.message || "Applied to project successfully!");
+      setHasApplied(true); // Update the state to reflect the application
+    } catch (error) {
+      console.error("Error:", error.response?.data?.message || error.message);
+      alert(
+        error.response?.data?.message ||
+          "An error occurred while applying to the project."
+      );
+    }
+  };
+
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
       <div
@@ -29,10 +66,6 @@ function ProjectCard({ project }) {
         <p className="text-gray-400 text-sm mb-4">{project.description}</p>
         <div className="flex items-center justify-between pr-30 relative">
           <div className="">
-            {/* <div className="flex items-center text-sm mb-2">
-              <User className="w-4 h-4 mr-2 text-gray-400" />
-              <span>Project Manager: {project.projectManager}</span>
-            </div> */}
             <div className="flex items-center text-sm mb-2">
               <Calendar className="w-4 h-4 mr-2 text-gray-400" />
               <span>Posted: {project.createdAt}</span>
@@ -48,13 +81,20 @@ function ProjectCard({ project }) {
           </div>
 
           <div className="absolute right-10 p-2 rounded-lg">
-            <button className="apply-button">
-              <div>
+            {hasApplied ? (
+              <div className="text-green-500 font-semibold">Applied</div>
+            ) : (
+              <button
+                className="apply-button"
+                onClick={() => handleApply(project._id)}
+              >
                 <div>
-                  <div>Apply Now</div>
+                  <div>
+                    <div>Apply Now</div>
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
+            )}
           </div>
         </div>
       </div>

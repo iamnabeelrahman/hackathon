@@ -1,34 +1,15 @@
 import React, { useState } from "react";
-import {
-  Rocket,
-  Trophy,
-  ArrowLeft,
-  Mail,
-  Lock,
-  User,
-  KeyRound,
-} from "lucide-react";
+import { Rocket, Trophy, ArrowLeft, Mail, Lock } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function Login({
-  // handleSubmit,
-  setCurrentPage,
-  // name,
-  // setName,
-  // email,
-  // setEmail,
-  // password,
-  // setPassword,
-  // confirmPassword,
-  // setConfirmPassword,
-  setCurrentStuff,
-}) {
+function Login({ setCurrentPage, setCurrentStuff, userData, setUserData }) {
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  // Something
 
   const handleLogin = async (e) => {
     setIsSubmitting(true);
@@ -43,10 +24,12 @@ function Login({
 
     alert(response.data.message || "Logged in successfully!");
     setIsSubmitting(false);
-    console.log("User data:", response.data.user);
+    navigate("/dash");
+    window.location.reload();
+    setUserData(response.data.user);
     localStorage.setItem("accessToken", response.data.accessToken);
-    return navigate("/dash");
   };
+
   return (
     <div className="login-container">
       <Rocket className="rocket rocket-1" size={48} />

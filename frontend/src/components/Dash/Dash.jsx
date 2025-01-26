@@ -5,7 +5,7 @@ import MyProjectCard from "./MyProjectCard";
 import axios from "axios";
 import Filters from "./Filters";
 
-const FeaturedProjects = () => {
+const FeaturedProjects = ({ userData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMyProjects, setIsMyProjects] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -30,7 +30,7 @@ const FeaturedProjects = () => {
       const fetchedProjects = response.data.projects.docs;
       setProjects(fetchedProjects);
       setFilteredProjects(fetchedProjects);
-      console.log(response.data.message || "Fetched projects successfully!");
+      // console.log(response.data.message || "Fetched projects successfully!");
     } catch (error) {
       console.error("Error:", error.response?.data?.message || error.message);
     } finally {
@@ -109,6 +109,11 @@ const FeaturedProjects = () => {
     fetchProjects();
   }, []);
 
+  // Filter user's created projects
+  const myProjects = projects.filter((project) =>
+    userData.createdProjects?.includes(project._id)
+  );
+
   return (
     <>
       <div className="bg-black text-white p-6 min-h-screen">
@@ -151,12 +156,22 @@ const FeaturedProjects = () => {
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div
+            className={` ${
+              isMyProjects ? "flex mt-6 flex-col items-center gap-3" : "grid grid-cols-1 md:grid-cols-3 gap-6"
+            }`}
+          >
             {isMyProjects ? (
-              <MyProjectCard project={demoProject} />
+              myProjects.length > 0 ? (
+                myProjects.map((project) => (
+                  <MyProjectCard key={project._id} project={project} />
+                ))
+              ) : (
+                <p>No projects found.</p>
+              )
             ) : filteredProjects.length > 0 ? (
               filteredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard key={project._id} project={project} userData={userData} />
               ))
             ) : (
               <p>No projects found.</p>

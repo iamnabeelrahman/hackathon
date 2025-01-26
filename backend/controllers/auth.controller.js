@@ -16,8 +16,8 @@ const registerUser = async (req, res) => {
     });
   }
 
-  const userByUsername = await User.findOne({ username: body.username }); // check if username already exists
-  const userByEmail = await User.findOne({ email: body.email }); // check if email already exists
+  const userByUsername = await User.findOne({ username: body.username }); 
+  const userByEmail = await User.findOne({ email: body.email }); 
 
   const messages = [];
 
@@ -28,7 +28,7 @@ const registerUser = async (req, res) => {
     messages.push("Email already exists");
   }
   if (messages.length > 0) {
-    console.log(messages.join(", "));
+    // console.log(messages.join(", "));
     return res.status(409).json({
       messages: messages.join(", "), // Combined messages for user existance
     });
@@ -154,7 +154,7 @@ const logoutUser = async (req, res) => {
       message: "Logged out successfully",
     });
   } catch (error) {
-    console.log("Logout error:", error);
+    // console.log("Logout error:", error);
     res.status(500).json({
       message: "An error occurred while logging out",
     });
@@ -457,6 +457,39 @@ const updatePhoneNumber = async (req, res) => {
   }
 };
 
+const userData = async (req, res) => {
+  try {
+    // Extract userId from the authenticated user (from the token)
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(400).json({
+        message: "User ID not found in the request.",
+      });
+    }
+
+    // Fetch user data from the database using the user ID
+    const user = await User.findById(userId).select("-password -refreshToken"); // Exclude password and refreshToken from the response
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    // Send the user data as a response
+    return res.status(200).json({
+      message: "User data fetched successfully.",
+      user,
+    });
+  } catch (error) {
+    // console.log("Error fetching user data: ", error);
+    return res.status(500).json({
+      message: "An error occurred while fetching user data.",
+    });
+  }
+};
+
 
 
 module.exports = {
@@ -469,6 +502,6 @@ module.exports = {
   updateEmail,
   updateProfileImage,
   uploadResume,
-  updatePhoneNumber
-
-};
+  updatePhoneNumber,
+  userData
+}

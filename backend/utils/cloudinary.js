@@ -3,7 +3,6 @@ const fs = require("fs");
 
 // Function to upload a local file to Cloudinary
 const uploadOnCloudinary = async (fileBuffer, filename) => {
-  // Configuration
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -16,28 +15,26 @@ const uploadOnCloudinary = async (fileBuffer, filename) => {
       return null;
     }
 
-    // Return a promise for the upload stream
     const uploadResult = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { resource_type: "auto", public_id: filename },
         (error, result) => {
           if (error) {
-            reject(error); // Reject the promise in case of error
+            reject(error); 
           } else {
-            resolve(result); // Resolve the promise with the result
+            resolve(result); 
           }
         }
       );
 
-      // Stream the file buffer to Cloudinary
-      uploadStream.end(fileBuffer); // Use the end() method to send the buffer
+      uploadStream.end(fileBuffer);
     });
 
-    console.log("File is uploaded", uploadResult.url);
+    // console.log("File is uploaded", uploadResult.url);
     return uploadResult;
 
   } catch (error) {
-    console.log("Upload failed", error);
+    // console.log("Upload failed", error);
     return null;
   }
 };

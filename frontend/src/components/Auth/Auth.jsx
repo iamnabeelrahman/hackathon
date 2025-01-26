@@ -17,6 +17,8 @@ function Auth({
   setConfirmPassword,
   currentStuff,
   setCurrentStuff,
+  userData,
+  setUserData,
 }) {
   return (
     <>
@@ -49,6 +51,8 @@ function Auth({
           confirmPassword={confirmPassword}
           setConfirmPassword={setConfirmPassword}
           setCurrentStuff={setCurrentStuff}
+          userData={userData}
+          setUserData={setUserData}
         />
       )}
     </>

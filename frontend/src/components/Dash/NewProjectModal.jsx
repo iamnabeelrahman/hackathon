@@ -64,7 +64,7 @@ const NewProjectModal = ({ isOpen, onClose }) => {
 
       const result = await response.json();
       if (response.ok) {
-        console.log("Project posted successfully:", result);
+        // console.log("Project posted successfully:", result);
         // Optionally reset form, close modal, etc.
         setProject({
           projectName: "",

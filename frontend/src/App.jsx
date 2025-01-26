@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, } from "react-router-dom";
 import Auth from "./components/Auth/Auth";
 import Landing from "./components/Landing";
 import Dash from "./components/Dash/Dash";
-import Profile from "./components/Profile/Profile";
 import Navbar from "./components/Navbar";
 import axios from "axios";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import TermsAndConditions from "./components/TermsCondition";
 
 function App() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -16,59 +17,50 @@ function App() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentStuff, setCurrentStuff] = useState("signup");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       setIsLoggedIn(true);
+      fetchUserData(token);
     }
   }, []);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     if (currentStuff === "signup") {
-  //       // if (password !== confirmPassword) {
-  //       //   return alert("Passwords do not match!");
-  //       // }
-  //       // Send registration request
-  //       const response = await axios.post("https://api-backend-projectpal-6gsq.onrender.com/api/v1/auth/register", {
-  //         email,
-  //         password,
-  //         username,
-  //         fullName : name,
-  //       });
-
-  //       alert(response.data.message || "Registered successfully!");
-  //     } else if (currentStuff === "signin") {
-  //       // Send login request
-  //       const response = await axios.post("https://api-backend-projectpal-6gsq.onrender.com/api/v1/auth/login", {
-  //         email,
-  //         password,
-  //       });
-
-  //       alert(response.data.message || "Logged in successfully!");
-  //       console.log("User data:", response.data.user);
-  //       // Save token in localStorage or a cookie (if not already set by backend)
-  //       localStorage.setItem("accessToken", response.data.accessToken);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error.response?.data?.message || error.message);
-  //     alert(error.response?.data?.message || "An error occurred.");
-  //   }
-  // };
+  const fetchUserData = async (token) => {
+    try {
+      const response = await axios.get(
+        "https://api-backend-projectpal-6gsq.onrender.com/api/v1/auth/user",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUserData(response.data.user);
+    } catch (error) {
+      console.error("Error fetching user data:", error.response?.data?.message || error.message);
+    }
+  };
 
   return (
     <>
-      <Navbar isLoggedIn={isLoggedIn} />
+      <Navbar isLoggedIn={isLoggedIn} userData={userData} />
       <Routes>
-        <Route path="/" element={<Landing setCurrentPage={setCurrentPage} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+        <Route
+          path="/"
+          element={
+            <Landing
+              setCurrentPage={setCurrentPage}
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+            />
+          }
+        />
         <Route
           path="/auth"
           element={
             <Auth
-              // handleSubmit={handleSubmit}
               setCurrentPage={setCurrentPage}
               name={name}
               setName={setName}
@@ -82,11 +74,14 @@ function App() {
               setConfirmPassword={setConfirmPassword}
               currentStuff={currentStuff}
               setCurrentStuff={setCurrentStuff}
+              userData={userData}
+              setUserData={setUserData}
             />
           }
         />
-        <Route path="/dash" element={<Dash />} />
-        {/* <Route path="/profile" element={<Profile />} /> */}
+        <Route path="/dash" element={<Dash userData={userData} />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/termsandcondition" element={<TermsAndConditions />} />
       </Routes>
     </>
   );

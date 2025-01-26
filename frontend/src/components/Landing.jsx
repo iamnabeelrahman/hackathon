@@ -9,7 +9,7 @@ function Landing({ setCurrentPage, isLoggedIn }) {
         <Rocket className="rocket rocket-1" size={48} />
         <Rocket className="rocket rocket-2" size={48} />
 
-        <h2 className="hero-subtitle">PROJECTPAL.NET</h2>
+        <h2 className="hero-subtitle">AURACONNECT.VERCEL.APP</h2>
         <h1 className="hero-title">
           Find your Team Members and Grow your Project Idea
         </h1>
@@ -21,7 +21,7 @@ function Landing({ setCurrentPage, isLoggedIn }) {
             </Link>
           ) : (
             <Link className={""} to={"/auth"}>
-              Join Projectpal
+              Join AuraConnect
             </Link>
           )}
         </button>
@@ -51,30 +51,31 @@ function Landing({ setCurrentPage, isLoggedIn }) {
           </div>
           <div className="members-text">
             <div className="members-count">many action takers</div>
-            <div>have joined Projectpal</div>
+            <div>have joined AuraConnect</div>
           </div>
         </div>
       </main>
 
       <footer className="footer">
         <h2 className="footer-title">
-          From <span>Idea</span> to the <span>Execution</span> 🚀 <u>Build</u>{" "}
-          or <u>Join</u> Your <span>Dream Team</span>
+          From <span>Idea</span> to the <span>Execution</span>
+          <span className="roc"> 🚀 </span>
+          <u>Build</u> or <u>Join</u> Your <span>Dream Team</span>
         </h2>
         <p className="footer-subtitle">
-          Kickstart your hackathon journey by finding the perfect teammates,
-          guidance, and collaboration opportunities — All in one place.
+          Kickstart Your Ideas Journey by Finding the Perfect Teammates,
+          Guidance, and Collaboration Opportunities — All in one place.
         </p>
         <div className="footer-links">
           <a href="/privacy" className="footer-link">
             Privacy Policy
           </a>
-          <a href="/terms" className="footer-link">
+          <a href="/termsandcondition" className="footer-link">
             Terms and Conditions
           </a>
-          <a href="/community" className="footer-link">
+          {/* <a href="/community" className="footer-link">
             Join our community!
-          </a>
+          </a> */}
         </div>
       </footer>
     </>

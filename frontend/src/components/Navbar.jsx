@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Profile from "./Profile/Profile";
 
-function Navbar({ isLoggedIn }) {
+function Navbar({ isLoggedIn, userData }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -11,7 +11,7 @@ function Navbar({ isLoggedIn }) {
       <nav className="nav">
         <Link to={"/"} className="nav-brand">
           <Trophy size={24} />
-          Projectpal
+          AuraConnect
         </Link>
 
         <div className="nav-links">
@@ -38,7 +38,7 @@ function Navbar({ isLoggedIn }) {
       </nav>
 
       {isModalOpen && (
-        <Profile isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+        <Profile isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} userData={userData} />
       )}
     </>
   );

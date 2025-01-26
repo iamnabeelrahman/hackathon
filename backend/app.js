@@ -10,8 +10,8 @@ const corsOptions = {
   };
   
   app.use(cors(corsOptions));
-console.log("got reeqiest and ehre i am ");
-console.log("CORS enabled for all origins");
+// console.log("got reeqiest and ehre i am ");
+// console.log("CORS enabled for all origins");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: "20kb" }));
